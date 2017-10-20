@@ -1,0 +1,2 @@
+model_checkpoint_path: "D:\\Projects\\2048_Solver\\2048-python-master\\2048_AI_attempt_001.tflern"
+all_model_checkpoint_paths: "D:\\Projects\\2048_Solver\\2048-python-master\\2048_AI_attempt_001.tflern"
