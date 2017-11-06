@@ -5,7 +5,7 @@ from time import *
 import numpy as np
 from copy import deepcopy
 
-
+# TKinter design params ----------------------
 SIZE = 500
 GRID_LEN = 4
 GRID_PADDING = 10
@@ -20,9 +20,9 @@ CELL_COLOR_DICT = {2: "#776e65", 4: "#776e65", 8: "#f9f6f2", 16: "#f9f6f2",
                     512: "#f9f6f2", 1024: "#f9f6f2", 2048: "#f9f6f2"}
 FONT = ("Verdana", 40, "bold")
 
-MAX_MOVES = 4096
+# AI params -------------------------------
 
-# ACTION_LIST = [KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT,]
+MAX_MOVES = 4096
 
 KEY_UP_ALT = "\'\\uf700\'"
 KEY_DOWN_ALT = "\'\\uf701\'"
@@ -38,9 +38,15 @@ ACTION_LIST = [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, ]
 DEFAULT_DTYPE = np.uint16
 
 
-
+# -------------
+# "Manager" classes will manage 1 instance of a 2048 game and supply the methods necessary
+# to make decisions based on the game state
+# -------------
 
 class Tree_Search_Manager:
+    #####
+    # Class to handle minimax tree search methodology with generic scoring method
+    #####
     def __init__(self):
         self.commands = {KEY_UP: up_score, KEY_DOWN: down_score, KEY_LEFT: left_score, KEY_RIGHT: right_score,
                             KEY_UP_ALT: up_score, KEY_DOWN_ALT: down_score, KEY_LEFT_ALT: left_score, KEY_RIGHT_ALT: right_score }
@@ -51,7 +57,13 @@ class Tree_Search_Manager:
         return np.copy(thing)
 
     def make_decision_per_state_scoring(self, initial_state, metric = brad_state_score):
+      #####
+      # Max return function, with generic "metric" so that multiple different scoring metrics can be used
+      #####
         def recursive_func(states):
+          #####
+          # Internal recursive function
+          #####
             for i, state in enumerate(states):
                 states[i] = add_two(state)
             action_states = np.zeros([0, 4, 4], dtype=DEFAULT_DTYPE)
@@ -115,6 +127,9 @@ class Tree_Search_Manager:
 
 
     def evaluate_n_steps_minimax(self, num_steps, game_state, ep = 0.95):
+      #####
+      # Minimax decision tree
+      #####
         def recursive_min(state, steps):
             possible_states = np.zeros([2*num_zeros(state), 4, 4], dtype=DEFAULT_DTYPE)
             if len(possible_states) == 0:
@@ -368,14 +383,22 @@ class Tree_Search_Manager:
 
 
 class Multi_Game_Manager:
-
+  #####
+  # Class for running deep Q networks and convolutional networks
+  #####
     def run_random_games(self,num_games):
+      #####
+      # Runs a series of random games; this is used in data collection
+      #####
         for game_num in range(num_games):
             current_game = Game_Grid()
             current_game.run_random_game()
             current_game.destroy()
 
     def collect_data_with_score_threshold(self,score_threshold,num_games):
+      #####
+      # Runs games with random moves, and saves the state-move pairs of games that make it above a given score threshold
+      #####
         pass #ILLEGAL METHOD
         training_data = []
         scores = []
@@ -464,6 +487,9 @@ class Multi_Game_Manager:
         return model
 
     def deep_Q_network_runner(self, model):
+      #####
+      # Runs Q network from a given model
+      #####
         pass
         def remember(action, reward, next_state, done):
             memory.append((state, action, reward, next_state, done))
@@ -483,6 +509,9 @@ class Multi_Game_Manager:
 
 
 class Game_Grid(Frame):
+  #####
+  # Game grid definition
+  #####
     def __init__(self):
         Frame.__init__(self)
 
@@ -558,6 +587,10 @@ class Game_Grid(Frame):
 
 
 def run_DQN():
+  #####
+  # Illegal method; do not run
+  #####
+    pass
     DQN = DQN_Manager()
     for game_num in range(100):
         game = Game_Grid()
