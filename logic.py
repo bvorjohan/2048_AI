@@ -3,10 +3,6 @@
 from random import *
 import numpy as np
 
-# [Marking Scheme]
-# Points to note:
-# Matrix elements must be equal but not identical
-# 1 mark for creating the correct matrix
 
 def new_game(n):
     #####
