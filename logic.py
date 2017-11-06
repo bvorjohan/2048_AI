@@ -1,16 +1,7 @@
 #
-# CS1010FC --- Programming Methodology
-#
-# Mission N Solutions
-#
-# Note that written answers are commented out to allow us to run your
-# code easily while grading your problem set.
+
 from random import *
 import numpy as np
-
-#######
-#Task 1a#
-#######
 
 # [Marking Scheme]
 # Points to note:
@@ -18,6 +9,9 @@ import numpy as np
 # 1 mark for creating the correct matrix
 
 def new_game(n):
+    #####
+    # Generate new matrix
+    #####
     matrix = []
 
     for i in range(n):
@@ -25,18 +19,17 @@ def new_game(n):
     return matrix
 
 def num_zeros(mat):
+    #####
+    # Returns the number of 0s in a 4x4 matrix
+    #####
     return 16-np.count_nonzero(mat)
 
-###########
-# Task 1b #
-###########
 
-# [Marking Scheme]
-# Points to note:
-# Must ensure that it is created on a zero entry
-# 1 mark for creating the correct loop
 
 def add_two(mat):
+    #####
+    # Adds a random tile
+    #####
     a = randint(0, len(mat)-1)
     b = randint(0, len(mat)-1)
     while mat[a][b] != 0:
@@ -45,19 +38,12 @@ def add_two(mat):
     mat[a][b] = (2 if random() < .9 else 4)
     return mat
 
-###########
-# Task 1c #
-###########
 
-# [Marking Scheme]
-# Points to note:
-# Matrix elements must be equal but not identical
-# 0 marks for completely wrong solutions
-# 1 mark for getting only one condition correct
-# 2 marks for getting two of the three conditions
-# 3 marks for correct checking
 
 def game_score(mat):
+    #####
+    # Evaluates the value of a game by taking the value of the greatest tile
+    #####
     max_tile = 0
     for i in range(len(mat)):
         for j in range(len(mat[0])):
@@ -66,6 +52,9 @@ def game_score(mat):
     return max_tile
 
 def game_state(mat):
+    #####
+    # Determines the state of the game
+    #####    
     for i in range(len(mat)-1):
         for j in range(len(mat[0])-1):
             if mat[i][j] == mat[i+1][j] or mat[i][j+1] == mat[i][j]:
@@ -81,50 +70,29 @@ def game_state(mat):
             return 'not over'
     return 'lose'
 
-###########
-# Task 2a #
-###########
-
-# [Marking Scheme]
-# Points to note:
-# 0 marks for completely incorrect solutions
-# 1 mark for solutions that show general understanding
-# 2 marks for correct solutions that work for all sizes of matrices
 
 
 def reverse(mat):
+    #####
+    # Flips matrix laterally
+    #####
     return np.flip(mat, 1)
 
-###########
-# Task 2b #
-###########
-
-# [Marking Scheme]
-# Points to note:
-# 0 marks for completely incorrect solutions
-# 1 mark for solutions that show general understanding
-# 2 marks for correct solutions that work for all sizes of matrices
 
 
 def transpose(mat):
+    #####
+    # Transposes matrix
+    #####
     return np.transpose(mat)
 
 
-##########
-# Task 3 #
-##########
-
-# [Marking Scheme]
-# Points to note:
-# The way to do movement is compress -> merge -> compress again
-# Basically if they can solve one side, and use transpose and reverse correctly they should
-# be able to solve the entire thing just by flipping the matrix around
-# No idea how to grade this one at the moment. I have it pegged to 8 (which gives you like,
-# 2 per up/down/left/right?) But if you get one correct likely to get all correct so...
-# Check the down one. Reverse/transpose if ordered wrongly will give you wrong result.
 
 
 def cover_up(mat):
+    #####
+    # Performs a "swipe" without merging
+    #####
     new = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     done = False
     for i in range(4):
@@ -139,6 +107,9 @@ def cover_up(mat):
 
 
 def merge(mat):
+    #####
+    # Performs a merge operation - to be done after a swipe in "cover_up"
+    #####
     done = False
     for i in range(4):
         for j in range(3):
@@ -150,6 +121,9 @@ def merge(mat):
 
 
 def merge_score(mat):
+    #####
+    # Determines the score gained from a move (as in the original game)
+    #####
     score = 0
     mult = 1
     done = False
@@ -214,7 +188,7 @@ def right(game):
 
 def up_score(game):
         # print("up")
-        # return matrix after shifting up
+        # return matrix and score after shifting up
         game = transpose(game)
         game, done = cover_up(game)
         temp = merge_score(game)
@@ -227,6 +201,7 @@ def up_score(game):
 
 def down_score(game):
         # print("down")
+        # return matrix and score after shifting down
         game = reverse(transpose(game))
         game, done = cover_up(game)
         temp = merge_score(game)
@@ -239,7 +214,7 @@ def down_score(game):
 
 def left_score(game):
         # print("left")
-        # return matrix after shifting left
+        # return matrix and score after shifting left
         game, done = cover_up(game)
         temp = merge_score(game)
         game = temp[0]
@@ -250,7 +225,7 @@ def left_score(game):
 
 def right_score(game):
         # print("right")
-        # return matrix after shifting right
+        # return matrix and score after shifting right
         game = reverse(game)
         game, done = cover_up(game)
         temp = merge_score(game)
@@ -263,14 +238,14 @@ def right_score(game):
 
 
 def brad_state_score(mat):
+    #####
+    # An alternative scoring function, one which tries to imitate an intuative, human style
+    #####
     coord_list = [(0,0),(0,1),(0,2),(0,3),
                   (1, 3), (1, 2), (1, 1), (1, 0),
                   (2, 0), (2, 1), (2, 2), (2, 3),
                   (3, 3), (3, 2), (3, 1), (3, 0),]
-    # coord_list = [[0,0],[0,1],[0,2],[0,3],
-    #               [1, 3], [1, 2], [1, 1], [1, 0],
-    #               [2, 0], [2, 1], [2, 2], [2, 3],
-    #               [3, 3], [3, 2], [3, 1], [3, 0],]
+
 
     weight_mat = np.array([32768,16384,8192,4096, 2048, 1024, 512, 256, 128,64,32,16, 8, 4, 2, 1])
 
@@ -339,6 +314,9 @@ def brad_state_score(mat):
 
 
 def zeros_to_steps(zeros):
+    #####
+    # Converts the number of zeros on the board to iterative steps
+    #####
     if zeros < 2:
         return 4
     elif zeros < 6:
